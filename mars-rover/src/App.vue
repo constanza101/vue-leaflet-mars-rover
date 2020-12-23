@@ -32,19 +32,19 @@
     </v-app-bar>
 
     <v-main>
-      <MarsMap/>
+      <Home/>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import MarsMap from './components/MarsMap';
+import Home from './components/Home';
 
 export default {
   name: 'App',
 
   components: {
-    MarsMap,
+    Home,
   },
 
   data: () => ({
