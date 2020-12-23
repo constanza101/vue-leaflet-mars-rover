@@ -2,7 +2,7 @@
   <v-app>
     <v-app-bar
       app
-      color="primary"
+      color="black"
       dark
     >
       <div class="d-flex align-center">
@@ -10,47 +10,41 @@
           alt="Vuetify Logo"
           class="shrink mr-2"
           contain
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
+          src="https://www.pinclipart.com/picdir/big/90-906532_moon-rover-png-clipart.png"
           transition="scale-transition"
-          width="40"
+          width="50"
         />
 
-        <v-img
-          alt="Vuetify Name"
-          class="shrink mt-1 hidden-sm-and-down"
-          contain
-          min-width="100"
-          src="https://cdn.vuetifyjs.com/images/logos/vuetify-name-dark.png"
-          width="100"
-        />
+      <span class="pl-7" style="font-size: 24px">Run you rover in Mars</span>
+
       </div>
 
       <v-spacer></v-spacer>
 
       <v-btn
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
+        href="https://github.com/constanza101/vue-leaflet-mars-rover"
         target="_blank"
         text
-      >
-        <span class="mr-2">Latest Release</span>
+      >  <v-icon>mdi-github</v-icon>
+        <span class="mx-2">git hub repository</span>
         <v-icon>mdi-open-in-new</v-icon>
       </v-btn>
     </v-app-bar>
 
     <v-main>
-      <HelloWorld/>
+      <MarsMap/>
     </v-main>
   </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld';
+import MarsMap from './components/MarsMap';
 
 export default {
   name: 'App',
 
   components: {
-    HelloWorld,
+    MarsMap,
   },
 
   data: () => ({
