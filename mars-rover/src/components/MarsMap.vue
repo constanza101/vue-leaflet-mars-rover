@@ -100,66 +100,54 @@
       </v-col>
 
     </v-row>
+   
     <v-dialog v-model="dialog" max-width="490">
-      <v-card dark>
-        <v-col cols="12" class="d-flex justify-center pt-5">
-          <v-btn x-large fab><v-icon x-large>mdi-space-station mdi-spin</v-icon></v-btn>
-        </v-col>
-        <v-card-title>
-          Oops! we have discovered that Mars has a very unusual flat and squared
-          shape!!
-        </v-card-title>
-
-        <v-card-text>
-          Fortunately our rover has a boundary detector which prevents it to
-          fall out of the planet!  <br>
-          Your planned route has been cancelled, please plan a new route.
-        </v-card-text>
-
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="primary" class="mb-2" @click="dialog = false">
-            try again
-          </v-btn>
-        </v-card-actions>
-      </v-card>
+       <DialogAlert 
+       v-if="dialogBorder"
+       title="Oops! we have discovered that Mars has a very unusual flat and squared shape!!"
+       text1="Fortunately our rover has a boundary detector which prevents it to fall out of the planet!" 
+       text2="Your planned route has been cancelled, please plan a new route."
+       @close-dialog="closeDialogBorder()"
+       ></DialogAlert>
+      <DialogAlert 
+       v-if="dialogObstacle"
+       title="Oops! Yoy have bumped into a VOLCANO!!"
+       text1="Our rober can't climb, so it has stopped here." 
+       text2="Your planned route has been cancelled, please plan a new route."
+       @close-dialog="closeDialogObstacle()"
+       ></DialogAlert>
     </v-dialog>
   </div>
 </template>
 
 <script>
+import DialogAlert from './DialogAlert.vue'
 import { CRS } from "leaflet";
 import { latLng } from "leaflet";
 import {
   LMap,
-  // LTileLayer,
   LImageOverlay,
   LMarker,
   LPopup,
   LIcon,
   LRectangle,
-  // LTooltip,
-  // LControl,
-  // LGeoJson
 } from "vue2-leaflet";
 
 export default {
   name: "Example",
   components: {
+    DialogAlert,
     LMap,
-    // LTileLayer,
-    // LGeoJson,
     LRectangle,
     LMarker,
     LImageOverlay,
     LPopup,
     LIcon,
-    // LTooltip,
-    // LControl,
   },
   data() {
     return {
       dialog: false,
+      dialogBorder: false,
       dialogObstacle: false,
       popupMessage: "",
       degrees: 0,
@@ -180,36 +168,15 @@ export default {
       ],
       style: { color: 'black', weight: 3 }
       },
-      search: "",
-      value: null,
-      filterTags: [],
       loading: false,
-      show: true,
-      enableTooltip: true,
       zoom: -10,
       center: [141.26713, 111.974814, 17],
-      geojson: null,
-      fillColor: "#e4ce7f",
       url: "https://geology.com/articles/mars/olympus-mons-volcano.jpg",
-      // url: "http://leafletjs.com/examples/crs-simple/uqm_map_full.png",
-
-      attribution:
-        '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
       bounds: [
         [-100, -100],
         [400, 400],
       ],
       crs: CRS.Simple,
-      stars: [
-        { name: "Sol", lng: 175.2, lat: 145.0 },
-        { name: "Mizar", lng: 41.6, lat: 130.1 },
-        { name: "Krueger-Z", lng: 13.4, lat: 56.5 },
-        { name: "Deneb", lng: 218.7, lat: 8.3 },
-      ],
-      travel: [
-        [145.0, 175.2],
-        [8.3, 218.7],
-      ],
     };
   },
   computed: {
@@ -227,178 +194,23 @@ export default {
       return direction;
     },
 
-    headers() {
-      let headers = [
-        {
-          text: "nombre",
-          align: "start",
-          filterable: true,
-          value: "name",
-          width: 200,
-        },
-        {
-          text: "tags",
-          align: "start",
-          filterable: true,
-          value: "tags",
-          width: 20,
-        },
-      ];
-      return headers;
-    },
-    shops() {
-      let shops = [
-        {
-          id: 1,
-          name: "Mercería B.E.A",
-          icon: "mdi-shoe-heel",
-          position: latLng(41.2790192, 1.974814, 17),
-          instagram: "https://www.instagram.com/merceriabea/",
-          website: "https://www.merceriabea.com/",
-          tags: [
-            "mercería",
-            "costurera",
-            "compostura",
-            "lana",
-            "mascarillas",
-            "arreglos",
-          ],
-        },
-        {
-          id: 2,
-          name: "Intez Inmuebles",
-          instagram: "https://www.instagram.com/intezinmuebles/",
-          icon: "mdi-office-building",
-          website: "https://www.intez.es/",
-          facebook: "https://www.facebook.com/intezinmuebles",
-          position: latLng(41.2687408, 1.9863705),
-          tags: [
-            " inmuebles",
-            " compra",
-            " venta",
-            " inmobiliaria",
-            " apartamentos",
-            " alquiler",
-          ],
-        },
-        {
-          id: 3,
-          name: "Gominoles",
-          icon: "mdi-muffin",
-          instagram: "https://www.instagram.com/gominoles.castelldefels/",
-          facebook: "https://www.facebook.com/gominoles.castelldefels/",
-          position: latLng(41.2826747, 1.9798195),
-          tags: [
-            " gominoles",
-            " dulces",
-            " golosinas",
-            " cumpleaños",
-            " niños",
-          ],
-        },
-        {
-          id: 4,
-          name: "La casa de la iaia",
-          icon: "mdi-baby-face-outline",
-          instagram: "https://www.instagram.com/lacasadelaiaiacastelldefels/",
-          facebook: "https://www.facebook.com/ludotecacastelldefels/",
-          position: latLng(41.2836019, 1.9790619),
-          tags: [
-            " ludoteca",
-            " guardería",
-            " fiestas infantiles",
-            " cumpleaños",
-            " niños",
-          ],
-        },
-        {
-          id: 5,
-          name: "Naturbella",
-          icon: "mdi-face-woman-outline",
-          instagram: "https://www.instagram.com/naturbellacastelldefels/",
-          facebook: "https://www.facebook.com/naturbellacastelldefels/",
-          position: latLng(41.2831487, 1.9788344),
-          website:
-            "https://centre-estetica-naturbella-castelldefels.negocio.site/",
-          tags: [
-            " estética",
-            " centro de estética",
-            " peluquería",
-            " manicura",
-            " esmalte",
-            " semipermanente",
-          ],
-        },
-        {
-          id: 6,
-          name: "Delma Nails",
-          icon: "mdi-face-woman-outline",
-          instagram: "https://www.instagram.com/delmaelisa_nails/",
-          position: latLng(41.2668608, 1.9789211),
-          website: "https://delma-nails.negocio.site/",
-          tags: [
-            " estética",
-            " centro de estética",
-            " manicura",
-            " esmalte",
-            " semipermanente",
-          ],
-        },
-      ];
-      return shops;
-    },
-    filteredShops() {
-      return this.shops.filter((item) => {
-        return (
-          item.name.toLowerCase().includes(this.search.toLowerCase()) ||
-          item.tags.join("").toLowerCase().includes(this.search.toLowerCase())
-        );
-      });
-    },
-    tags() {
-      let foundTags = [];
-      this.shops.map((shop) => {
-        foundTags = [...new Set([...foundTags, ...shop.tags])];
-      });
-      return foundTags;
-    },
-    options() {
-      return {
-        onEachFeature: this.onEachFeatureFunction,
-      };
-    },
-    styleFunction() {
-      const fillColor = this.fillColor; // important! need touch fillColor in computed for re-calculate when change fillColor
-      return () => {
-        return {
-          weight: 2,
-          color: "#ECEFF1",
-          opacity: 1,
-          fillColor: fillColor,
-          fillOpacity: 1,
-        };
-      };
-    },
-    onEachFeatureFunction() {
-      if (!this.enableTooltip) {
-        return () => {};
-      }
-      return (feature, layer) => {
-        layer.bindTooltip(
-          "<div>code:" +
-            feature.properties.code +
-            "</div><div>nom: " +
-            feature.properties.nom +
-            "</div>",
-          { permanent: false, sticky: true }
-        );
-      };
-    },
   },
   methods: {
+    foundBorder(){
+      this.dialogBorder = true
+      this.dialog = true
+    },
+    closeDialogBorder(){
+      this.dialog= false
+      this.dialogBorder = false
+    },
+    closeDialogObstacle(){
+      this.dialog= false
+      this.dialogObstacle = false
+    },
     foundObstacle(degrees){
       this.dialogObstacle = true
-      console.log(degrees)
+      this.dialog = true
       degrees === 0 ? this.rover.position.lat -= 1: 
       degrees === 90 ? this.rover.position.lng -= 1: 
       degrees === 180 ? this.rover.position.lat += 1: 
@@ -451,28 +263,24 @@ export default {
             let obstacle = ((this.rover.position.lat < 327) && (this.rover.position.lat > 192) && (-2 < this.rover.position.lng) && (this.rover.position.lng < 109) )
 
             if (degrees == 0) {
-              console.log('move north')
               northBound
-                ? (this.dialog = true)
+                ? (this.foundBorder())
                 : obstacle ? this.foundObstacle(degrees)
                 : (this.rover.position.lat += 1);
 
             } else if (degrees == 90) {
-              eastBound ? (this.dialog = true) 
+              eastBound ? (this.foundBorder()) 
                 : obstacle ? this.foundObstacle(degrees)
                 : (this.rover.position.lng += 1);
-              console.log("move east");
             } else if (degrees == 180) {
               southBound
-                ? (this.dialog = true)
+                ? (this.foundBorder())
                 : obstacle ? this.foundObstacle(degrees)
                 : (this.rover.position.lat -= 1);
             } else if (degrees == 270) {
-              westBound ? (this.dialog = true)
+              westBound ? (this.foundBorder())
                   : obstacle ? this.foundObstacle(degrees) 
-                  : obstacle ? console.log(this.rover.position.lng) 
                   : (this.rover.position.lng -= 1)
-              console.log("move west");
             }
               this.roverKey++;
           }, 100);
