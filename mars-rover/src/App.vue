@@ -15,7 +15,7 @@
           width="50"
         />
 
-      <span class="pl-7" style="font-size: 24px">Run you rover in Mars</span>
+      <span class="pl-7" style="font-size: 24px">A trip to Mars</span>
 
       </div>
 

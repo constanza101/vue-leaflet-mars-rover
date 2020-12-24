@@ -1,6 +1,6 @@
 <template>
-  <v-container>
-    <v-row v-if="home" class="text-center">
+  <v-container >
+    <v-row v-if="home" class="text-center mt-12">
       <v-col cols="12">
         <v-img
           :src="require('../assets/mars.png')"
@@ -16,20 +16,20 @@
         </h1>
 
         <p class="subheading font-weight-regular">
-            Are you ready to discover life in Mars?
+            Are you ready to discover life in the red planet?
           </p>
       </v-col>
 
       <v-col  cols="12">
-        <v-btn @click="home = false"  color="primary" >take me there!</v-btn>
+        <v-btn @click="home = false" dark color="orange" >take me there!</v-btn>
       </v-col>
 
    
     </v-row>
     <v-row v-if="!home">
 
-      <mars-map>
-      </mars-map>
+      <MarsMap />
+      <!-- <LeafletMap /> -->
 
     </v-row>
   </v-container>
@@ -37,11 +37,13 @@
 
 <script>
 import MarsMap from './MarsMap.vue'
+// import LeafletMap from './LeafletMap.vue'
 
   export default {
     name: 'Home',
     components: {
-      MarsMap
+      MarsMap,
+      // LeafletMap
     },
 
     data: () => ({
