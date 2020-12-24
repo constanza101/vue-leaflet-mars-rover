@@ -33,11 +33,14 @@
 
     <v-main>
       <Home/>
+      <Footer />
     </v-main>
+
   </v-app>
 </template>
 
 <script>
+import Footer from './components/Footer.vue';
 import Home from './components/Home';
 
 export default {
@@ -45,6 +48,7 @@ export default {
 
   components: {
     Home,
+    Footer,
   },
 
   data: () => ({

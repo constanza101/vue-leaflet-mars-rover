@@ -1,5 +1,5 @@
 <template>
-  <v-container >
+  <v-container style="height: calc(100vh - 130px); overflow: auto;">
     <v-row v-if="home" class="text-center mt-12">
       <v-col cols="12">
         <v-img
@@ -29,7 +29,6 @@
     <v-row v-if="!home">
 
       <MarsMap />
-      <!-- <LeafletMap /> -->
 
     </v-row>
   </v-container>
@@ -37,13 +36,11 @@
 
 <script>
 import MarsMap from './MarsMap.vue'
-// import LeafletMap from './LeafletMap.vue'
 
   export default {
     name: 'Home',
     components: {
       MarsMap,
-      // LeafletMap
     },
 
     data: () => ({
