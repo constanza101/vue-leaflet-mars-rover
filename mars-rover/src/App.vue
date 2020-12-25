@@ -1,13 +1,14 @@
 <template>
-  <v-app>
+  <v-app style="height: 100vh; overflow:hidden;">
     <v-app-bar
       app
       color="black"
       dark
     >
       <div class="d-flex align-center">
+        
         <v-img
-          alt="Vuetify Logo"
+          alt="Logo"
           class="shrink mr-2"
           contain
           src="https://www.pinclipart.com/picdir/big/90-906532_moon-rover-png-clipart.png"
@@ -22,6 +23,7 @@
       <v-spacer></v-spacer>
 
       <v-btn
+        class="hidden-sm-and-down"
         href="https://github.com/constanza101/vue-leaflet-mars-rover"
         target="_blank"
         text
@@ -29,6 +31,7 @@
         <span class="mx-2">git hub repository</span>
         <v-icon>mdi-open-in-new</v-icon>
       </v-btn>
+      
     </v-app-bar>
 
     <v-main>
@@ -52,7 +55,7 @@ export default {
   },
 
   data: () => ({
-    //
+    drawer: false,
   }),
 };
 </script>

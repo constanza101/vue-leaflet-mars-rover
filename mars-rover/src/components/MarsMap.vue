@@ -1,19 +1,51 @@
 <template>
   <div id="leaflet-map" style="max-height: calc(100vh - 150px)">
     <v-row>
-      <v-col cols="12" md="8" lg="7" class="px-5 d-flex justify-center">
-        <h3>Welcome to the red planet! Enjoy a virtual tour!</h3>
+      
+      <v-col cols="12" md="8" lg="7" class="px-5 py-0 d-flex justify-center">
+        <b>Welcome to the red planet!</b> 
       </v-col>
+      <v-col cols="12" md="8" lg="7" class="px-5 py-0 d-flex justify-center">
+        <b> Enjoy a virtual tour!</b>
+      </v-col>
+      <v-col cols="12" md="8" lg="7" class="px-5  d-flex justify-center ">
+        <v-btn color="primary" class="hidden-md-and-up" @click="drawer = !drawer" > Let's do it! </v-btn>
+      </v-col>
+
+      <v-navigation-drawer
+        right
+        style="width: 500px"
+        v-model="drawer"
+        absolute
+        bottom
+        temporary
+      >
+      <v-row>
+        <v-col >
+            <InstructionsAndCommands
+          :roverPosition ="rover.position"
+          :direction="direction"
+          @move-rover="moveRover"
+          @close-drawer="closeDrawer()"
+        />
+        </v-col>
+      </v-row>
+    
+        
+      
+      </v-navigation-drawer>
+
+
     </v-row>
 
     <v-row class="px-xs-12 px-md-0">
-      <v-col cols="12" md="8" lg="7" class="px-5 d-flex justify-center">
+      <v-col cols="12" md="8" lg="7" class="px-0 d-flex justify-center">
         <l-map
           ref="map"
           :crs="crs"
-          style="height: 550px; width: 600px; background-color: black"
+          style="height: 550px; width: 98%; background-color: black"
           :center="center"
-          :options="{zoomControl: false}"
+          :options="{zoomControl: false, scrollWheelZoom: false}"
         >
           <l-image-overlay :url="url" :bounds="bounds" ></l-image-overlay>
           <l-rectangle :bounds="rectangle.bounds" :l-style="rectangle.style"></l-rectangle>
@@ -53,50 +85,16 @@
         md="4"
         lg="5"
         style="border-radius: 10px; background-color: #fff3e6"
-        class="px-5 d-flex justify-center"
+        class="hidden-sm-and-down"
       >
-        <v-row class="pr-3">
-          <v-col cols="12" lg="6">
-            <b>Instructions</b> <br />
-            Plan the route and type the commands in the textfield below. Press the button and watch it happen! <br>
-             * Don't worry about the boundaries, if the rover reaches a border it will not fall out of the map!
-          </v-col>
+      <InstructionsAndCommands
+        :roverPosition ="rover.position"
+        :direction="direction"
+        @move-rover="moveRover"
+        @close-drawer="closeDrawer()"
+       />
+      
 
-          <v-col cols="12" lg="6">
-            <b>Commands</b>
-            <ul>
-              <li><b>F:</b> moves the rover forwards one position</li>
-              <li> <b>R:</b> turns the rover right and moves the rover forwards one position</li>
-              <li> <b>L:</b> turns the rover left and moves the rover forwards one  position</li>
-            </ul>
-          </v-col>
-          <v-col cols="12" class="pl-7">
-            <v-text-field
-              v-model="roverMovements"
-              append-icon="mdi-arrow"
-              label="eg: RRFFFL"
-              single-line
-              hide-details
-              outlined
-              dense
-              :append-outer-icon="'mdi-rocket'"
-              @click:append-outer="moveRover"
-            ></v-text-field
-          ></v-col>
-
-          <v-col class="px-7">
-            <v-card>
-              <v-col cols="12">
-                <b>At the moment the rover is facing {{ direction }}.</b>
-                <v-icon class="pl-2">mdi-compass-rose</v-icon>
-              </v-col>
-              <v-col cols="12">
-                <b>Actual position:</b> <br />
-                {{ rover.position }}
-              </v-col>
-            </v-card>
-          </v-col>
-        </v-row>
       </v-col>
 
     </v-row>
@@ -109,6 +107,7 @@
        text2="Your planned route has been cancelled, please plan a new route."
        @close-dialog="closeDialogBorder()"
        ></DialogAlert>
+       
       <DialogAlert 
        v-if="dialogObstacle"
        title="Oops! Yoy have bumped into a VOLCANO!!"
@@ -121,7 +120,8 @@
 </template>
 
 <script>
-import DialogAlert from './DialogAlert.vue'
+import InstructionsAndCommands from './InstructionsAndCommands.vue';
+import DialogAlert from './DialogAlert.vue';
 import { CRS } from "leaflet";
 import { latLng } from "leaflet";
 import {
@@ -136,6 +136,7 @@ import {
 export default {
   name: "Example",
   components: {
+    InstructionsAndCommands,
     DialogAlert,
     LMap,
     LRectangle,
@@ -146,6 +147,7 @@ export default {
   },
   data() {
     return {
+      drawer: false,
       dialog: false,
       dialogBorder: false,
       dialogObstacle: false,
@@ -160,7 +162,6 @@ export default {
       },
       latitudude: 41.26713,
       longitude: 1.974814,
-      roverMovements: "",
       rectangle: {
         bounds:[
         [230, 30],
@@ -172,6 +173,7 @@ export default {
       zoom: -10,
       center: [141.26713, 111.974814, 17],
       url: "https://geology.com/articles/mars/olympus-mons-volcano.jpg",
+      // url: "https://photojournal.jpl.nasa.gov/jpeg/PIA00411.jpg",
       bounds: [
         [-100, -100],
         [400, 400],
@@ -196,6 +198,11 @@ export default {
 
   },
   methods: {
+    closeDrawer(){
+      console.log('this.drawer')
+      console.log(this.drawer)
+      this.drawer = false
+    },
     foundBorder(){
       this.dialogBorder = true
       this.dialog = true
@@ -220,9 +227,10 @@ export default {
     updatePosition(position) {
       this.rover.position = position;
     },
-    async moveRover() {
+    async moveRover(item) {
+      console.log(item)
       this.loading = true;
-      for (const char of this.roverMovements) {
+      for (const char of item) {
         await this.action(char.toLowerCase());
       }
       this.loading = false;

@@ -7,9 +7,7 @@
       elevation="4"
     >
       <v-row align="end" justify="center" style="padding-right: 20px">
-        <v-spacer />
-
-        <v-col v-for="link in links" :key="link.url">
+        <v-col v-for="link in links" :key="link.url" class="d-flex justify-center">
           <v-btn :href="link.url" target="_blank" text>
             <v-icon>{{ link.icon }}</v-icon>
           </v-btn>
