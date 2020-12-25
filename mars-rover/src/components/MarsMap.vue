@@ -84,7 +84,6 @@
         cols="12"
         md="4"
         lg="5"
-        style="border-radius: 10px; background-color: #fff3e6"
         class="hidden-sm-and-down"
       >
       <InstructionsAndCommands
@@ -172,8 +171,8 @@ export default {
       loading: false,
       zoom: -10,
       center: [141.26713, 111.974814, 17],
-      url: "https://geology.com/articles/mars/olympus-mons-volcano.jpg",
-      // url: "https://photojournal.jpl.nasa.gov/jpeg/PIA00411.jpg",
+      // url: "https://geology.com/articles/mars/olympus-mons-volcano.jpg",
+      url: "https://photojournal.jpl.nasa.gov/jpeg/PIA00411.jpg",
       bounds: [
         [-100, -100],
         [400, 400],

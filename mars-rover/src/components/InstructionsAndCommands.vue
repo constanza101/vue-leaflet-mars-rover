@@ -1,7 +1,8 @@
 <template>
   <div id="instructions-commands">
-      <v-row class="px-5">
-          <v-col cols="12" lg="6" style="text-align: start;">
+    <v-card style="min-height: calc(100vh - 240px)">
+      <v-row class="px-5" >
+          <v-col cols="12" lg="5" style="text-align: start;" >
             <b>Instructions</b> <br />
             Plan the route and type the commands in the textfield below. Press the button and watch it happen! <br>
              * Don't worry about the boundaries, if the rover reaches a border it will not fall out of the map!
@@ -15,7 +16,7 @@
               <li> <b>L:</b> turns the rover left and moves the rover forwards one  position</li>
             </ul>
           </v-col>
-          <v-col cols="12" class="pl-7">
+          <v-col cols="12" class="pl-7 mt-lg-5">
             <v-text-field
               v-model="roverMovements"
               append-icon="mdi-arrow"
@@ -30,7 +31,7 @@
           ></v-col>
 
           <v-col class="px-7">
-            <v-card>
+            <v-card class="mt-lg-10">
               <v-col cols="12">
                 <b>At the moment the rover is facing {{ direction }}.</b>
                 <v-icon class="pl-2">mdi-compass-rose</v-icon>
@@ -42,6 +43,7 @@
             </v-card>
           </v-col>
         </v-row>
+        </v-card>
   </div>
 </template>
 
