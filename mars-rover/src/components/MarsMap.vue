@@ -109,7 +109,7 @@
        
       <DialogAlert 
        v-if="dialogObstacle"
-       title="Oops! Yoy have bumped into a VOLCANO!!"
+       title="Oops! Yoy have bumped into a CRATER!!"
        text1="Our rober can't climb, so it has stopped here." 
        text2="Your planned route has been cancelled, please plan a new route."
        @close-dialog="closeDialogObstacle()"
@@ -163,8 +163,8 @@ export default {
       longitude: 1.974814,
       rectangle: {
         bounds:[
-        [230, 30],
-        [310, 90],
+        [140, 180],
+        [240, 70],
       ],
       style: { color: 'black', weight: 3 }
       },
@@ -267,7 +267,7 @@ export default {
             let eastBound = this.rover.position.lng > 370;
             let southBound = this.rover.position.lat < -86;
             let westBound = this.rover.position.lng < -82;
-            let obstacle = ((this.rover.position.lat < 327) && (this.rover.position.lat > 192) && (-2 < this.rover.position.lng) && (this.rover.position.lng < 109) )
+            let obstacle = ((this.rover.position.lat < 256) && (this.rover.position.lat > 104) && (36 < this.rover.position.lng) && (this.rover.position.lng < 197) )
 
             if (degrees == 0) {
               northBound
