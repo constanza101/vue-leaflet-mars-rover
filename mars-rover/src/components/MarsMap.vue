@@ -1,41 +1,43 @@
 <template>
   <div id="leaflet-map" style="max-height: calc(100vh - 150px)">
     <v-row>
-      
       <v-col cols="12" md="8" lg="7" class="px-5 py-0 d-flex justify-center">
-        <b>Welcome to the red planet!</b> 
+        <b>Welcome to the red planet!</b>
       </v-col>
       <v-col cols="12" md="8" lg="7" class="px-5 py-0 d-flex justify-center">
         <b> Enjoy a virtual tour!</b>
       </v-col>
-      <v-col cols="12" md="8" lg="7" class="px-5  d-flex justify-center ">
-        <v-btn color="primary" class="hidden-md-and-up" @click="drawer = !drawer" > Let's do it! </v-btn>
+      <v-col cols="12" md="8" lg="7" class="px-5 d-flex justify-center">
+        <v-btn
+          color="primary"
+          class="hidden-md-and-up"
+          @click="drawer = !drawer"
+        >
+          Let's do it!
+        </v-btn>
       </v-col>
 
-      <v-navigation-drawer
-        right
-        style="width: 500px"
-        v-model="drawer"
-        absolute
-        bottom
-        temporary
-      >
-      <v-row>
-        <v-col >
-            <InstructionsAndCommands
-          :roverPosition ="rover.position"
-          :direction="direction"
-          @move-rover="moveRover"
-          @close-drawer="closeDrawer()"
-        />
-        </v-col>
-      </v-row>
-    
-        
-      
-      </v-navigation-drawer>
-
-
+      <v-col class="hidden-md-and-up">
+        <v-navigation-drawer
+          right
+          style="width: 500px"
+          v-model="drawer"
+          absolute
+          bottom
+          temporary
+        >
+          <v-row>
+            <v-col>
+              <InstructionsAndCommands
+                :roverPosition="rover.position"
+                :direction="direction"
+                @move-rover="moveRover"
+                @close-drawer="closeDrawer()"
+              />
+            </v-col>
+          </v-row>
+        </v-navigation-drawer>
+      </v-col>
     </v-row>
 
     <v-row class="px-xs-12 px-md-0">
@@ -45,10 +47,13 @@
           :crs="crs"
           style="height: 550px; width: 98%; background-color: black"
           :center="center"
-          :options="{zoomControl: false, scrollWheelZoom: false}"
+          :options="{ zoomControl: false, scrollWheelZoom: false }"
         >
-          <l-image-overlay :url="url" :bounds="bounds" ></l-image-overlay>
-          <l-rectangle :bounds="rectangle.bounds" :l-style="rectangle.style"></l-rectangle>
+          <l-image-overlay :url="url" :bounds="bounds"></l-image-overlay>
+          <l-rectangle
+            :bounds="rectangle.bounds"
+            :l-style="rectangle.style"
+          ></l-rectangle>
 
           <l-marker
             :draggable="true"
@@ -58,7 +63,9 @@
           >
             <l-icon>
               <div class="background-icon">
-                <v-icon large  >{{ rover.icon }} {{ `mdi-rotate-${rover.facing}` }}</v-icon>
+                <v-icon large
+                  >{{ rover.icon }} {{ `mdi-rotate-${rover.facing}` }}</v-icon
+                >
               </div>
             </l-icon>
 
@@ -75,52 +82,41 @@
             </l-popup>
           </l-marker>
         </l-map>
-              
-     
-
       </v-col>
 
-      <v-col
-        cols="12"
-        md="4"
-        lg="5"
-        class="hidden-sm-and-down"
-      >
-      <InstructionsAndCommands
-        :roverPosition ="rover.position"
-        :direction="direction"
-        @move-rover="moveRover"
-        @close-drawer="closeDrawer()"
-       />
-      
-
+      <v-col cols="12" md="4" lg="5" class="hidden-sm-and-down">
+        <InstructionsAndCommands
+          :roverPosition="rover.position"
+          :direction="direction"
+          @move-rover="moveRover"
+          @close-drawer="closeDrawer()"
+        />
       </v-col>
-
     </v-row>
-   
+
     <v-dialog v-model="dialog" max-width="490">
-       <DialogAlert 
-       v-if="dialogBorder"
-       title="Oops! we have discovered that Mars has a very unusual flat and squared shape!!"
-       text1="Fortunately our rover has a boundary detector which prevents it to fall out of the planet!" 
-       text2="Your planned route has been cancelled, please plan a new route."
-       @close-dialog="closeDialogBorder()"
-       ></DialogAlert>
-       
-      <DialogAlert 
-       v-if="dialogObstacle"
-       title="Oops! Yoy have bumped into a CRATER!!"
-       text1="Our rober can't climb, so it has stopped here." 
-       text2="Your planned route has been cancelled, please plan a new route."
-       @close-dialog="closeDialogObstacle()"
-       ></DialogAlert>
+      <DialogAlert
+        v-if="dialogBorder"
+        title="Oops! we have discovered that Mars has a very unusual flat and squared shape!!"
+        text1="Fortunately our rover has a boundary detector which prevents it to fall out of the planet!"
+        text2="Your planned route has been cancelled, please plan a new route."
+        @close-dialog="closeDialogBorder()"
+      ></DialogAlert>
+
+      <DialogAlert
+        v-if="dialogObstacle"
+        title="Oops! Yoy have bumped into a CRATER!!"
+        text1="Our rober can't climb, so it has stopped here."
+        text2="Your planned route has been cancelled, please plan a new route."
+        @close-dialog="closeDialogObstacle()"
+      ></DialogAlert>
     </v-dialog>
   </div>
 </template>
 
 <script>
-import InstructionsAndCommands from './InstructionsAndCommands.vue';
-import DialogAlert from './DialogAlert.vue';
+import InstructionsAndCommands from "./InstructionsAndCommands.vue";
+import DialogAlert from "./DialogAlert.vue";
 import { CRS } from "leaflet";
 import { latLng } from "leaflet";
 import {
@@ -162,11 +158,11 @@ export default {
       latitudude: 41.26713,
       longitude: 1.974814,
       rectangle: {
-        bounds:[
-        [140, 180],
-        [240, 70],
-      ],
-      style: { color: 'black', weight: 3 }
+        bounds: [
+          [140, 180],
+          [240, 70],
+        ],
+        style: { color: "black", weight: 3 },
       },
       loading: false,
       zoom: -10,
@@ -194,40 +190,43 @@ export default {
       }
       return direction;
     },
-
   },
   methods: {
-    closeDrawer(){
-      console.log('this.drawer')
-      console.log(this.drawer)
-      this.drawer = false
+    closeDrawer() {
+      console.log("this.drawer");
+      console.log(this.drawer);
+      this.drawer = false;
     },
-    foundBorder(){
-      this.dialogBorder = true
-      this.dialog = true
+    foundBorder() {
+      this.dialogBorder = true;
+      this.dialog = true;
     },
-    closeDialogBorder(){
-      this.dialog= false
-      this.dialogBorder = false
+    closeDialogBorder() {
+      this.dialog = false;
+      this.dialogBorder = false;
     },
-    closeDialogObstacle(){
-      this.dialog= false
-      this.dialogObstacle = false
+    closeDialogObstacle() {
+      this.dialog = false;
+      this.dialogObstacle = false;
     },
-    foundObstacle(degrees){
-      this.dialogObstacle = true
-      this.dialog = true
-      degrees === 0 ? this.rover.position.lat -= 1: 
-      degrees === 90 ? this.rover.position.lng -= 1: 
-      degrees === 180 ? this.rover.position.lat += 1: 
-      degrees === 270 ? this.rover.position.lng += 1: degrees
-      
+    foundObstacle(degrees) {
+      this.dialogObstacle = true;
+      this.dialog = true;
+      degrees === 0
+        ? (this.rover.position.lat -= 1)
+        : degrees === 90
+        ? (this.rover.position.lng -= 1)
+        : degrees === 180
+        ? (this.rover.position.lat += 1)
+        : degrees === 270
+        ? (this.rover.position.lng += 1)
+        : degrees;
     },
     updatePosition(position) {
       this.rover.position = position;
     },
     async moveRover(item) {
-      console.log(item)
+      console.log(item);
       this.loading = true;
       for (const char of item) {
         await this.action(char.toLowerCase());
@@ -263,33 +262,42 @@ export default {
           setTimeout(() => {
             let degrees = this.rover.facing;
             // let foundObstacle = false;
-            let northBound = this.rover.position.lat > 366; 
+            let northBound = this.rover.position.lat > 366;
             let eastBound = this.rover.position.lng > 370;
             let southBound = this.rover.position.lat < -86;
             let westBound = this.rover.position.lng < -82;
-            let obstacle = ((this.rover.position.lat < 256) && (this.rover.position.lat > 104) && (36 < this.rover.position.lng) && (this.rover.position.lng < 197) )
+            let obstacle =
+              this.rover.position.lat < 256 &&
+              this.rover.position.lat > 104 &&
+              36 < this.rover.position.lng &&
+              this.rover.position.lng < 197;
 
             if (degrees == 0) {
               northBound
-                ? (this.foundBorder())
-                : obstacle ? this.foundObstacle(degrees)
+                ? this.foundBorder()
+                : obstacle
+                ? this.foundObstacle(degrees)
                 : (this.rover.position.lat += 1);
-
             } else if (degrees == 90) {
-              eastBound ? (this.foundBorder()) 
-                : obstacle ? this.foundObstacle(degrees)
+              eastBound
+                ? this.foundBorder()
+                : obstacle
+                ? this.foundObstacle(degrees)
                 : (this.rover.position.lng += 1);
             } else if (degrees == 180) {
               southBound
-                ? (this.foundBorder())
-                : obstacle ? this.foundObstacle(degrees)
+                ? this.foundBorder()
+                : obstacle
+                ? this.foundObstacle(degrees)
                 : (this.rover.position.lat -= 1);
             } else if (degrees == 270) {
-              westBound ? (this.foundBorder())
-                  : obstacle ? this.foundObstacle(degrees) 
-                  : (this.rover.position.lng -= 1)
+              westBound
+                ? this.foundBorder()
+                : obstacle
+                ? this.foundObstacle(degrees)
+                : (this.rover.position.lng -= 1);
             }
-              this.roverKey++;
+            this.roverKey++;
           }, 100);
         }
       }

@@ -6,8 +6,9 @@
       dark
     >
       <div class="d-flex align-center">
-        
+      <v-btn plain x-large text href="/">
         <v-img
+         
           alt="Logo"
           class="shrink mr-2"
           contain
@@ -15,6 +16,8 @@
           transition="scale-transition"
           width="50"
         />
+      </v-btn>
+
 
       <span class="pl-7" style="font-size: 24px">A trip to Mars</span>
 

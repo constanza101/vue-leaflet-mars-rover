@@ -29,6 +29,8 @@ export default {
       let myLinks = [
         { icon: "mdi-github", url: "https://github.com/constanza101" },
         { icon: "mdi-linkedin", url: "https://linkedin.com/in/constanzadi" },
+        { icon: "mdi-card-account-details-star", url: "https://github.com/constanza101/cv_2021/raw/main/Constanza%20Diaz%202021%20CV.pdf" },
+        
       ];
       return myLinks;
     },
