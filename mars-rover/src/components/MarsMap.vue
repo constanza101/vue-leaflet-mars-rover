@@ -44,7 +44,7 @@
           :crs="crs"
           style="height: 550px; width: 98%; background-color: black"
           :center="center"
-          :options="{ zoomControl: false, scrollWheelZoom: false }"
+          :options="{ zoomControl: false, scrollWheelZoom: false, touchZoom: false, tap: false }"
         >
           <l-image-overlay :url="url" :bounds="bounds"></l-image-overlay>
           <l-rectangle
