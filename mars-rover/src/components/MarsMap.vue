@@ -1,13 +1,11 @@
 <template>
-  <div id="leaflet-map" style="max-height: calc(100vh - 150px)">
+  <div class="py-0" id="leaflet-map" style="max-height: calc(100vh - 150px)">
     <v-row>
       <v-col cols="12" md="8" lg="7" class="px-5 py-0 d-flex justify-center">
-        <b>Welcome to the red planet!</b>
+        <span style="font-weight: bold" class="pr-2">Welcome to the red planet! Enjoy a virtual tour!</span>
       </v-col>
-      <v-col cols="12" md="8" lg="7" class="px-5 py-0 d-flex justify-center">
-        <b> Enjoy a virtual tour!</b>
-      </v-col>
-      <v-col cols="12" md="8" lg="7" class="px-5 d-flex justify-center">
+      
+      <v-col class="hidden-md-and-up d-flex justify-center">
         <v-btn
           color="primary"
           class="hidden-md-and-up"
@@ -17,27 +15,26 @@
         </v-btn>
       </v-col>
 
-      <v-col class="hidden-md-and-up">
-        <v-navigation-drawer
-          right
-          style="width: 500px"
-          v-model="drawer"
-          absolute
-          bottom
-          temporary
-        >
-          <v-row>
-            <v-col>
-              <InstructionsAndCommands
-                :roverPosition="rover.position"
-                :direction="direction"
-                @move-rover="moveRover"
-                @close-drawer="closeDrawer()"
-              />
-            </v-col>
-          </v-row>
-        </v-navigation-drawer>
-      </v-col>
+      <v-navigation-drawer
+        class="hidden-md-and-up"
+        right
+        style="width: 500px"
+        v-model="drawer"
+        absolute
+        bottom
+        temporary
+      >
+        <v-row>
+          <v-col>
+            <InstructionsAndCommands
+              :roverPosition="rover.position"
+              :direction="direction"
+              @move-rover="moveRover"
+              @close-drawer="closeDrawer()"
+            />
+          </v-col>
+        </v-row>
+      </v-navigation-drawer>
     </v-row>
 
     <v-row class="px-xs-12 px-md-0">
