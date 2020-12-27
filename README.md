@@ -4,8 +4,8 @@ Moving a rover in mars using Vue, Vuetlify and Leaflet for vue2
 vue2-leaflet source and installation:
 https://vue2-leaflet.netlify.app/
 
-*Mars Rover Mission*
-Your Task 
+## *Mars Rover Mission*
+Your Task:
 You’re part of the team that explores Mars by sending remotely controlled vehicles to the surface of the planet. Develop a software that translates the commands sent from earth to instructions that are understood by the rover. 
 Requirements 
 * ● You are given the initial starting point (x,y) of a rover and the direction (N,S,E,W) it is facing. 
