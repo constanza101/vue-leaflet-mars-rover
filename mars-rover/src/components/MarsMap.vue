@@ -2,9 +2,11 @@
   <div class="py-0" id="leaflet-map" style="max-height: calc(100vh - 150px)">
     <v-row>
       <v-col cols="12" md="8" lg="7" class="px-5 py-0 d-flex justify-center">
-        <span style="font-weight: bold" class="pr-2">Welcome to the red planet! Enjoy a virtual tour!</span>
+        <span style="font-weight: bold" class="pr-2"
+          >Welcome to the red planet! Enjoy a virtual tour!</span
+        >
       </v-col>
-      
+
       <v-col class="hidden-md-and-up d-flex justify-center">
         <v-btn
           color="primary"
@@ -44,7 +46,12 @@
           :crs="crs"
           style="height: 550px; width: 98%; background-color: black"
           :center="center"
-          :options="{ zoomControl: false, scrollWheelZoom: false, touchZoom: false, tap: false }"
+          :options="{
+            zoomControl: false,
+            scrollWheelZoom: false,
+            touchZoom: false,
+            tap: false,
+          }"
         >
           <l-image-overlay :url="url" :bounds="bounds"></l-image-overlay>
           <l-rectangle
@@ -97,6 +104,7 @@
         title="Oops! we have discovered that Mars has a very unusual flat and squared shape!!"
         text1="Fortunately our rover has a boundary detector which prevents it to fall out of the planet!"
         text2="Your planned route has been cancelled, please plan a new route."
+        :loading="loading"
         @close-dialog="closeDialogBorder()"
       ></DialogAlert>
 
@@ -105,6 +113,7 @@
         title="Oops! Yoy have bumped into a CRATER!!"
         text1="Our rober can't climb, so it has stopped here."
         text2="Your planned route has been cancelled, please plan a new route."
+        :loading="loading"
         @close-dialog="closeDialogObstacle()"
       ></DialogAlert>
     </v-dialog>
@@ -139,6 +148,7 @@ export default {
   },
   data() {
     return {
+      stop: false,
       drawer: false,
       dialog: false,
       dialogBorder: false,
@@ -189,8 +199,6 @@ export default {
   },
   methods: {
     closeDrawer() {
-      console.log("this.drawer");
-      console.log(this.drawer);
       this.drawer = false;
     },
     closeDialogBorder() {
@@ -204,14 +212,14 @@ export default {
     foundBorder() {
       this.dialogBorder = true;
       this.dialog = true;
-      this.stopMoving()
+      this.stopMoving();
     },
     foundObstacle() {
       this.dialogObstacle = true;
       this.dialog = true;
-      this.stopMoving()
+      this.stopMoving();
     },
-    moveFwd(){
+    moveFwd() {
       let degrees = this.rover.facing;
       degrees === 0
         ? (this.rover.position.lat += 1)
@@ -223,11 +231,11 @@ export default {
         ? (this.rover.position.lng -= 1)
         : degrees;
 
-         this.roverKey++;
+      this.roverKey++;
     },
-    stopMoving(){
+    stopMoving() {
+      this.stop = true;
       let degrees = this.rover.facing;
-      console.log('stopMoving')
       degrees === 0
         ? (this.rover.position.lat -= 1)
         : degrees === 90
@@ -242,17 +250,20 @@ export default {
       this.rover.position = position;
     },
     async moveRover(item) {
-      console.log(item);
+      this.stop = false;
       this.loading = true;
       for (const char of item) {
-        await this.action(char.toLowerCase());
+        const actionChars = ["f", "l", "r"];
+        if (actionChars.includes(char) && !this.dialog) {
+          await this.action(char.toLowerCase());
+        }
       }
       this.loading = false;
     },
     async action(char) {
       try {
         await this.waitPromise(2000).then(
-          this.turnRover(char).then(this.moveForward(char))
+          this.turnRover(char).then(this.moveForward())
         );
       } catch (e) {
         console.log(e);
@@ -271,11 +282,10 @@ export default {
         ? (this.rover.facing = 270)
         : this.rover.facing;
     },
-    async moveForward(char) {
-      const actionChars = ["f", "l", "r"];
-      if (actionChars.includes(char)) {
-        for (let x = 0; x < 100; x++) {
-          setTimeout(() => {
+    async moveForward() {
+      for (let x = 0; x < 100; x++) {
+        setTimeout(() => {
+          if (this.stop === false) {
             const northBound = this.rover.position.lat > 366;
             const eastBound = this.rover.position.lng > 370;
             const southBound = this.rover.position.lat < -86;
@@ -287,13 +297,13 @@ export default {
               this.rover.position.lng > 36 &&
               this.rover.position.lng < 197;
 
-              borders ? this.foundBorder()
-              : obstacle ? this.foundObstacle()
-              : this.moveFwd() 
-
-           
-          }, 100);
-        }
+            borders
+              ? this.foundBorder()
+              : obstacle
+              ? this.foundObstacle()
+              : this.moveFwd();
+          }
+        }, 100);
       }
     },
 

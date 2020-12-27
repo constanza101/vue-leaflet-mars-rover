@@ -15,7 +15,7 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="primary" class="mb-2" @click="closeDialog">
+          <v-btn :disabled="loading" color="primary" class="mb-2" @click="closeDialog">
             try again
           </v-btn>
         </v-card-actions>
@@ -32,6 +32,7 @@ export default {
     title: String,
     text1: String,
     text2: String,
+    loading: Boolean
   },
   data() {
     return {
