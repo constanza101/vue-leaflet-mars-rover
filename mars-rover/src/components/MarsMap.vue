@@ -164,7 +164,6 @@ export default {
       loading: false,
       zoom: -10,
       center: [141.26713, 111.974814, 17],
-      // url: "https://geology.com/articles/mars/olympus-mons-volcano.jpg",
       url: "https://photojournal.jpl.nasa.gov/jpeg/PIA00411.jpg",
       bounds: [
         [-100, -100],
@@ -194,10 +193,6 @@ export default {
       console.log(this.drawer);
       this.drawer = false;
     },
-    foundBorder() {
-      this.dialogBorder = true;
-      this.dialog = true;
-    },
     closeDialogBorder() {
       this.dialog = false;
       this.dialogBorder = false;
@@ -206,9 +201,33 @@ export default {
       this.dialog = false;
       this.dialogObstacle = false;
     },
-    foundObstacle(degrees) {
+    foundBorder() {
+      this.dialogBorder = true;
+      this.dialog = true;
+      this.stopMoving()
+    },
+    foundObstacle() {
       this.dialogObstacle = true;
       this.dialog = true;
+      this.stopMoving()
+    },
+    moveFwd(){
+      let degrees = this.rover.facing;
+      degrees === 0
+        ? (this.rover.position.lat += 1)
+        : degrees === 90
+        ? (this.rover.position.lng += 1)
+        : degrees === 180
+        ? (this.rover.position.lat -= 1)
+        : degrees === 270
+        ? (this.rover.position.lng -= 1)
+        : degrees;
+
+         this.roverKey++;
+    },
+    stopMoving(){
+      let degrees = this.rover.facing;
+      console.log('stopMoving')
       degrees === 0
         ? (this.rover.position.lat -= 1)
         : degrees === 90
@@ -253,48 +272,26 @@ export default {
         : this.rover.facing;
     },
     async moveForward(char) {
-      let actionChars = ["f", "l", "r"];
+      const actionChars = ["f", "l", "r"];
       if (actionChars.includes(char)) {
         for (let x = 0; x < 100; x++) {
           setTimeout(() => {
-            let degrees = this.rover.facing;
-            // let foundObstacle = false;
-            let northBound = this.rover.position.lat > 366;
-            let eastBound = this.rover.position.lng > 370;
-            let southBound = this.rover.position.lat < -86;
-            let westBound = this.rover.position.lng < -82;
-            let obstacle =
+            const northBound = this.rover.position.lat > 366;
+            const eastBound = this.rover.position.lng > 370;
+            const southBound = this.rover.position.lat < -86;
+            const westBound = this.rover.position.lng < -82;
+            const borders = northBound || eastBound || southBound || westBound;
+            const obstacle =
               this.rover.position.lat < 256 &&
               this.rover.position.lat > 104 &&
-              36 < this.rover.position.lng &&
+              this.rover.position.lng > 36 &&
               this.rover.position.lng < 197;
 
-            if (degrees == 0) {
-              northBound
-                ? this.foundBorder()
-                : obstacle
-                ? this.foundObstacle(degrees)
-                : (this.rover.position.lat += 1);
-            } else if (degrees == 90) {
-              eastBound
-                ? this.foundBorder()
-                : obstacle
-                ? this.foundObstacle(degrees)
-                : (this.rover.position.lng += 1);
-            } else if (degrees == 180) {
-              southBound
-                ? this.foundBorder()
-                : obstacle
-                ? this.foundObstacle(degrees)
-                : (this.rover.position.lat -= 1);
-            } else if (degrees == 270) {
-              westBound
-                ? this.foundBorder()
-                : obstacle
-                ? this.foundObstacle(degrees)
-                : (this.rover.position.lng -= 1);
-            }
-            this.roverKey++;
+              borders ? this.foundBorder()
+              : obstacle ? this.foundObstacle()
+              : this.moveFwd() 
+
+           
           }, 100);
         }
       }
