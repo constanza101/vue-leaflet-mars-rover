@@ -18,3 +18,36 @@ You’re part of the team that explores Mars by sending remotely controlled vehi
 * ● The rover can move left/right (l,r). 
 * ● Suppose we are on a really weird planet that is square. 200x200 for example :) 
 * ● Implement obstacle detection before each move to a new square. If a given sequence of commands encounters an obstacle, the rover moves up to the last possible point, aborts the sequence and reports the obstacle. 
+
+
+## Install
+
+    $ git clone https://github.com/constanza101/vue-leaflet-mars-rover.git
+    $ cd vue-leaflet-mars-rover
+    $ npm install
+    
+    
+## Start & watch
+
+    $ npm run serve
+
+## Simple build for production
+
+    $ npm run build
+
+## Description of the project: 
+
+This front-end project is developed in VUE.js, using Vuetify for styling and leaflet for Vue for a geolocalization of the rover.
+
+**1. Home:**
+
+    Constist of: 
+        - A form, validated using vuetify form validation with rules for each field.
+        - Getting questions and answers with axios.
+        - There is a loading on the "select" input, to wait for the response of the api where we get the items from. 
+        - This input select is disabled if there are no items to list.
+        - Saves user name to localstorage so that it can be used at the end when displaying the results.
+        - VUE Router: used to navigate between views, if we try to navigate to unexisting route, it redirects to 'home'.
+        - When clicking on the button, if the validation is correct, it navigates to next view using vue router.
+
+**2. Quiz view:**
