@@ -39,15 +39,29 @@ You’re part of the team that explores Mars by sending remotely controlled vehi
 
 This front-end project is developed in VUE.js, using Vuetify for styling and leaflet for Vue for a geolocalization of the rover.
 
-**1. Home:**
 
-    Constist of: 
-        - A form, validated using vuetify form validation with rules for each field.
-        - Getting questions and answers with axios.
-        - There is a loading on the "select" input, to wait for the response of the api where we get the items from. 
-        - This input select is disabled if there are no items to list.
-        - Saves user name to localstorage so that it can be used at the end when displaying the results.
-        - VUE Router: used to navigate between views, if we try to navigate to unexisting route, it redirects to 'home'.
-        - When clicking on the button, if the validation is correct, it navigates to next view using vue router.
+**1. MAP:**
 
-**2. Quiz view:**
+        - It is a squared map with a squeared "obstacle" randomly placed.
+        - It is required that the rover can stop and let the user know that they have reached a boundary or the obstacle.
+        - If the user bumps into the obstacle, a dialog will be displayed. 
+        - If it finds a boundary you will see the same component with different text. 
+        - I have used this dialog as an oportunity to make a *reusable component* to make the excercise more interesting.
+        
+**2. Instructions and directions:**
+
+        - The instructions and directions panel is placed on the right hand side in big screens and it is hidden in small screens.
+        - On smaller screens you can see them by clicking a button, and it will turn up as a bottom bar.
+        - There is a text input where the user can type the indicated letters to make the movements when clicking the rocket button.
+        - If the user types other characters, they will be ignored.
+        - If the rover is moving, the button is disabled.
+
+
+ **3. Bonus: real time localization**
+ 
+         - There is a localization panel that lets the user know where the rover is located all the time and which side it is facing.
+
+**Thank you for trying out my Mars-rover app, you can see more VUE.js apps on my profile :)**
+
+
+
