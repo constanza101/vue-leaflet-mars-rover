@@ -1,6 +1,7 @@
 # vue-leaflet-mars-rover
 Moving a rover in mars using Vue, Vuetlify and Leaflet for vue2
 
+Use the app on the following link: 
 https://constanza101.github.io/vue-leaflet-mars-rover/
 
 
